@@ -4,10 +4,10 @@ Fast and flexible [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) t
 
 ## TODO:
 
-- [ ] create `Makefile`
-- [ ] add `ncurses` library
-- [ ] clear the screen
-- [ ] print current status at the centre of the terminal
+- [x] create `Makefile`
+- [x] add `ncurses` library
+- [x] clear the screen
+- [x] print current status at the centre of the terminal
 - [ ] postpone menu on `p` press
 - [ ] pause on `space`
 - [ ] add optional notification
