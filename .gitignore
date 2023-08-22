@@ -6,3 +6,4 @@
 !LICENSE
 !sounds
 !sounds/**
+!config.def.h
