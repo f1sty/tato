@@ -1,6 +1,6 @@
 SRC = tato.c
 OBJ = ${SRC:.c=.o}
-CFLAGS = -ggdb -Wall -Wextra ${shell pkg-config --cflags ncurses}
+CFLAGS = -Wall -Wextra ${shell pkg-config --cflags ncurses}
 LDFLAGS = ${shell pkg-config --libs ncurses}
 CC = gcc
 DESTDIR = ${HOME}/.local
