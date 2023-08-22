@@ -2,7 +2,6 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 
 typedef enum { BLOCK, BREAK, LONG_BREAK } Status;
 
@@ -33,6 +32,7 @@ int main(void) {
 
   raw();
   noecho();
+  curs_set(0);
   print_centre(status, BLOCK);
   refresh();
   int ch;
