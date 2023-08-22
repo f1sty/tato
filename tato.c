@@ -23,24 +23,21 @@ void print_centre(char *str, Status status) {
 
   int x = (getmaxx(stdscr) - strlen(str)) / 2;
   int y = getmaxy(stdscr) / 2;
-  int color_pair;
 
   switch (status) {
   case WORKING_BLOCK:
-    color_pair = COLOR_PAIR(1);
+    attrset(COLOR_PAIR(1));
     break;
   case BREAK:
-    color_pair = COLOR_PAIR(2);
+    attrset(COLOR_PAIR(2));
     break;
   case LONG_BREAK:
-    color_pair = COLOR_PAIR(3);
+    attrset(COLOR_PAIR(3));
     break;
   default:
     exit(EXIT_FAILURE);
   }
-  attron(color_pair);
   mvprintw(y, x, "%s", str);
-  attroff(color_pair);
 }
 
 char *get_status_str(Status status) {
@@ -125,7 +122,6 @@ int main(void) {
       working_blocks_in_session = WORKING_BLOCKS_IN_SESSION;
       start = time(NULL);
       status = WORKING_BLOCK;
-      time_left = get_time_left(start, duration);
       break;
     case 's':
       duration = 0.0;
