@@ -11,7 +11,7 @@ typedef enum { WORKING_BLOCK, BREAK, LONG_BREAK } Status;
 typedef struct {
   int minutes;
   int seconds;
-} DisplayTime;
+} TimeSpan;
 
 thrd_t thread;
 
@@ -23,34 +23,24 @@ void print_centre(char *str, Status status) {
 
   int x = (getmaxx(stdscr) - strlen(str)) / 2;
   int y = getmaxy(stdscr) / 2;
+  int color_pair;
 
   switch (status) {
   case WORKING_BLOCK:
-    attron(COLOR_PAIR(1));
+    color_pair = COLOR_PAIR(1);
     break;
   case BREAK:
-    attron(COLOR_PAIR(2));
+    color_pair = COLOR_PAIR(2);
     break;
   case LONG_BREAK:
-    attron(COLOR_PAIR(3));
+    color_pair = COLOR_PAIR(3);
     break;
   default:
     exit(EXIT_FAILURE);
   }
+  attron(color_pair);
   mvprintw(y, x, "%s", str);
-  switch (status) {
-  case WORKING_BLOCK:
-    attroff(COLOR_PAIR(1));
-    break;
-  case BREAK:
-    attroff(COLOR_PAIR(2));
-    break;
-  case LONG_BREAK:
-    attroff(COLOR_PAIR(3));
-    break;
-  default:
-    exit(EXIT_FAILURE);
-  }
+  attroff(color_pair);
 }
 
 char *get_status_str(Status status) {
@@ -61,21 +51,22 @@ char *get_status_str(Status status) {
     return "break";
   case LONG_BREAK:
     return "long break";
+  default:
+    exit(EXIT_FAILURE);
   }
-
-  return "";
 }
 
-DisplayTime get_time_left(time_t start, double duration) {
+// If `duration` is 0.0, return empty TimeSpan, so we can implemet skip feature.
+TimeSpan get_time_left(time_t start, double duration) {
   if (duration == 0.0) {
-    DisplayTime dt = {.minutes = 0, .seconds = 0};
+    TimeSpan dt = {.minutes = 0, .seconds = 0};
     return dt;
   }
   double elapsed = difftime(time(NULL), start);
   double seconds_left = duration - elapsed;
   int minutes = (int)seconds_left / 60;
   int seconds = (int)seconds_left % 60;
-  DisplayTime dt = {.minutes = minutes, .seconds = seconds};
+  TimeSpan dt = {.minutes = minutes, .seconds = seconds};
 
   return dt;
 }
@@ -88,19 +79,23 @@ int play_alarm(void *path) {
   return 0;
 }
 
-void print_status(Status status, DisplayTime *time_left) {
+void print_status(Status status, TimeSpan *time_left) {
   char status_str[50] = {};
   snprintf(status_str, 50, "%s: %02dm %02ds left", get_status_str(status),
            time_left->minutes, time_left->seconds);
   print_centre(status_str, status);
 }
 
-int main(void) {
+void init() {
   initscr();
   raw();
   noecho();
   curs_set(0);
   timeout(1000);
+}
+
+int main(void) {
+  init();
 
   int ch;
   double working_block_len = WORKING_BLOCK_LENGTH_MIN * 60.0;
@@ -110,7 +105,7 @@ int main(void) {
   unsigned working_blocks_in_session = WORKING_BLOCKS_IN_SESSION;
   time_t start = time(NULL);
   Status status = WORKING_BLOCK;
-  DisplayTime time_left = get_time_left(start, duration);
+  TimeSpan time_left = get_time_left(start, duration);
 
   thrd_create(&thread, play_alarm, "~/.config/tato/sounds/oi.mp3");
   print_status(status, &time_left);
@@ -143,6 +138,7 @@ int main(void) {
         if (working_blocks_in_session == 0) {
           status = LONG_BREAK;
           duration = long_break_len;
+          working_blocks_in_session = WORKING_BLOCKS_IN_SESSION;
           thrd_create(&thread, play_alarm,
                       "~/.config/tato/sounds/long_ding.mp3");
         } else {
