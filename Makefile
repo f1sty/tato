@@ -8,7 +8,7 @@ DESTDIR = ${HOME}/.local
 all: tato
 
 options:
-	@echo dwm build options:
+	@echo tato build options:
 	@echo "CFLAGS   = ${CFLAGS}"
 	@echo "LDFLAGS  = ${LDFLAGS}"
 	@echo "CC       = ${CC}"
