@@ -29,10 +29,13 @@ clean:
 
 install: all
 	mkdir -p ${DESTDIR}${PREFIX}/bin
-	cp -f deadpan ${DESTDIR}${PREFIX}/bin
+	cp -f tato ${DESTDIR}${PREFIX}/bin
 	chmod 755 ${DESTDIR}${PREFIX}/bin/tato
+	mkdir -p ${XDG_CONFIG_HOME}/tato
+	cp -rf sounds ${XDG_CONFIG_HOME}/tato/
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/tato
+	rm -rf ${XDG_CONFIG_HOME}/tato
 
 .PHONY: all options clean install uninstall
