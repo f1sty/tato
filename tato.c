@@ -53,7 +53,7 @@ char *get_status_str(Status status) {
   }
 }
 
-// If `duration` is 0.0, return empty TimeSpan, so we can implemet skip feature.
+// If `duration` is 0.0, return empty TimeSpan, so we can implement skip feature.
 TimeSpan get_time_left(time_t start, double duration) {
   if (duration == 0.0) {
     TimeSpan dt = {.minutes = 0, .seconds = 0};
