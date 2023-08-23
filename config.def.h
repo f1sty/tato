@@ -3,4 +3,4 @@
 #define LONG_BREAK_LENGTH_MIN 15
 #define WORKING_BLOCKS_IN_SESSION 4
 #define POSTPONE_LEN_MIN 1
-#define PLAYER "pw-play"
+#define PLAYER "pw-play --volume 10"
