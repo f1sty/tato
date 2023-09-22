@@ -30,5 +30,6 @@ So be sure to include it into your `$PATH`.
 - [x] quit on `q` press
 - [x] skip on `s` press
 - [x] play alarm sound on state change
+- [ ] debug time overflows
 - [ ] wrap state into `struct`
 - [ ] add optional notification
