@@ -91,6 +91,7 @@ void init() {
   timeout(1000);
 }
 
+// TODO: probably switch to integers
 int main(void) {
   init();
 
@@ -128,7 +129,7 @@ int main(void) {
       break;
     }
     time_left = get_time_left(start, duration);
-    if (time_left.minutes == 0 && time_left.seconds == 0) {
+    if (time_left.minutes <= 0 && time_left.seconds <= 0) {
       if (status == WORKING_BLOCK) {
         --working_blocks_in_session;
         if (working_blocks_in_session == 0) {
